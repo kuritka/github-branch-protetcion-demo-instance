@@ -1,39 +1,25 @@
 ---
-# ./yamllint
-yaml-files:
-  - '*.yaml'
-  - '.yamllint'
+name: YamlLint
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+jobs:
+  lint:
+    name: YamlLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-rules:
-  braces:
-    level: warning
-    max-spaces-inside: 1
-  brackets: enable
-  colons: enable
-  commas: enable
-  comments:
-    level: warning
-  comments-indentation:
-    level: warning
-  document-end: disable
-  document-start:
-    level: warning
-  empty-lines: enable
-  empty-values: disable
-  hyphens: enable
-  indentation: enable
-  key-duplicates: enable
-  key-ordering: disable
-  line-length: disable
-  new-line-at-end-of-file: enable
-  new-lines: enable
-  octal-values: disable
-  quoted-strings: disable
-  trailing-spaces: enable
-  truthy:
-    level: warning
+      - name: Set up Python
+        uses: actions/setup-python@v5
 
-rules:
-  indentation:
-    ignore: |
-     **/templates/*.yaml
+      - name: YamlLint
+        run: yamllint .
